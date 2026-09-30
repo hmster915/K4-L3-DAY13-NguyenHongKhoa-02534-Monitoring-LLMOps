@@ -1,14 +1,14 @@
 # Báo cáo cá nhân — K4-L3B Day 13 Monitoring & LLMOps
 
-> Mỗi học viên hoàn thiện một file duy nhất này. Khi dẫn evidence, dùng đường dẫn tương đối, ví dụ `evidence/07-trace-waterfall.png`.
+> Mỗi học viên hoàn thiện một file duy nhất này. Khi dẫn evidence, dùng đường dẫn tương đối, ví dụ `evidence/03-incident-trace.png`.
 
 ## 1. Thông tin học viên
 
-- **Họ và tên:**
-- **MSSV:**
+- **Họ và tên:** Nguyen Hong Khoa
+- **MSSV:** 02534
 - **Lớp:** K4-L3B
-- **Repository URL:**
-- **Commit SHA cuối:**
+- **Repository URL:** https://github.com/hmster915/K4-L3-DAY13-NguyenHongKhoa-02534-Monitoring-LLMOps
+- **Commit SHA cuối:** `45fdaf51e4fcc8eb77c85d1cbd9fe7987b9427e4`
 - **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1`
 - **Tên project Langfuse cá nhân:** `day13-k4-l3b-<MSSV>`
 
@@ -18,20 +18,14 @@
 
 | Evidence | Đường dẫn |
 |---|---|
-| Pytest cuối | `evidence/01-pytest.png` |
-| Log validator | `evidence/02-log-validator.txt` |
-| Dashboard validator | `evidence/03-dashboard-validator.txt` |
-| Structured log | `evidence/04-structured-log.txt` |
-| PII redaction | `evidence/05-pii-redaction.txt` |
-| Trace list | `evidence/06-trace-list.txt` |
-| Trace waterfall | `evidence/07-trace-waterfall.txt` |
-| Trace metadata | `evidence/08-trace-metadata.txt` |
-| Prompt versions | `evidence/09-prompt-versions.txt` |
-| Prompt rollback | `evidence/10-prompt-rollback.txt` |
-| Dashboard runtime | `evidence/11-dashboard-overview.png` |
-| Incident metric | `evidence/12-incident-metric.png` |
-| Incident log | `evidence/13-incident-log.txt` |
-| Incident trace | `evidence/14-incident-trace.txt` |
+| Pytest cuối | `evidence/pytest.txt` |
+| Log validator | `evidence/log-validator.txt` |
+| Dashboard validator | `evidence/dashboard-validator.txt` |
+| Incident log / structured metadata | `evidence/01-incident-log.png` |
+| Trace list | `evidence/02-trace-list.png` |
+| Incident trace / waterfall / metadata | `evidence/03-incident-trace.png` |
+| Prompt versioning and rollback | `evidence/04-prompt-versioning.png` |
+| Dashboard incident | `evidence/05-dashboard-incident.png` |
 
 ## 3. Kết quả kỹ thuật
 
@@ -87,20 +81,20 @@
 
 ## 8. Giải thích và tự đánh giá
 
-- **Một quyết định kỹ thuật quan trọng và lý do:**
-- **Một lỗi/blocker đã gặp:**
-- **Cách tìm nguyên nhân và xử lý:**
-- **Cách hiểu luồng Metrics → Logs → Traces:**
-- **Vai trò của prompt version, token/cost, SLO hoặc rollback trong vận hành LLM:**
-- **Điều quan trọng nhất đã học:**
-- **Hạn chế hoặc phần chưa hoàn thành, nếu có:** Challenge chính thức đã hoàn thành bằng file K4-L3B phát hành từ upstream commit `0a7eadb`. Evidence metric là PNG runtime; evidence log/trace hiện là output text xác thực. Có thể bổ sung ảnh Langfuse UI cho evidence 14 trước khi nộp nếu browser đăng nhập khả dụng.
+- **Một quyết định kỹ thuật quan trọng và lý do:** Tách retrieval và generation thành child observations để có thể phân biệt bottleneck RAG với bottleneck model; CP3 chứng minh retrieval là span chậm.
+- **Một lỗi/blocker đã gặp:** Challenge chính thức chưa có trong checkout cũ; tôi đồng bộ bản phát hành chính thức từ upstream commit `0a7eadb` và không sửa nội dung challenge.
+- **Cách tìm nguyên nhân và xử lý:** Dùng dashboard để phát hiện P95 vượt 2000 ms, nối log bằng `correlation_id=req-623b84ba`, rồi đối chiếu trace `aa1791bc3a383f0820594b11c22648a6`; tắt `rag_slow` và xác nhận `/health` bình thường.
+- **Cách hiểu luồng Metrics → Logs → Traces:** Metrics chỉ ra triệu chứng và phạm vi; log cung cấp request/correlation ID; trace phân rã thời gian theo span để xác định root cause.
+- **Vai trò của prompt version, token/cost, SLO hoặc rollback trong vận hành LLM:** Prompt labels giúp audit/rollback an toàn; token/cost kiểm soát chi phí; SLO đặt ngưỡng cảnh báo và tránh đổi model khi nguyên nhân thực tế là retrieval.
+- **Điều quan trọng nhất đã học:** Evidence vận hành phải nối được cùng một request qua metric, log và trace; pass count riêng lẻ không đủ chứng minh incident.
+- **Hạn chế hoặc phần chưa hoàn thành, nếu có:** Không còn blocker kỹ thuật; evidence runtime chính thức đã đủ 3 file text và 5 ảnh theo upstream submission guide.
 
 ## 9. Checklist trước khi nộp
 
-- [ ] Kết quả và evidence thuộc commit SHA cuối.
-- [ ] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
-- [ ] Incident evidence nối đúng metric → log → trace.
-- [ ] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
-- [ ] Repository chạy lại được theo README.
-- [ ] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
+- [x] Kết quả và evidence thuộc commit SHA cuối.
+- [x] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
+- [x] Incident evidence nối đúng metric → log → trace.
+- [x] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
+- [x] Repository chạy lại được theo README.
+- [x] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
 - [ ] URL repo và commit SHA cuối đã được nộp trên LMS/Codelabs.
