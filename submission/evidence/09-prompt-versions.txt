@@ -1,0 +1,24 @@
+CP2 Langfuse Prompt Versions
+============================
+
+Project: day13-k4-l3b-02534
+Prompt name: day13-chat
+Prompt type: text
+
+Required variables in both versions:
+  {{feature}}
+  {{docs}}
+  {{message}}
+
+Version 1:
+  labels after rollback: baseline, production
+  trace ID: 84e4019c274135a8c4e2d7294f64d92e
+  trace correlation ID: req-ba5e1e01
+
+Version 2:
+  labels after rollback: candidate, latest
+  trace ID: 7a022e190e3ab0cd8cb43fd67609552a
+  trace correlation ID: req-ca2d1da2
+
+The generation observation for each trace reports prompt_name=day13-chat and
+the corresponding immutable prompt version.

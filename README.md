@@ -143,6 +143,11 @@ python scripts/validate_dashboard.py
 python -m pytest -q
 ```
 
+Sau khi load test tạo dữ liệu, mở dashboard runtime tại
+`http://127.0.0.1:8000/dashboard`. Dashboard đọc trực tiếp
+`data/logs.jsonl`, hiển thị sáu panel trong cửa sổ 60 phút và tự refresh sau
+30 giây.
+
 Baseline log chưa đạt là bình thường vì các `TODO` của CP1 chưa được làm. Ghi lại kết quả baseline vào `submission/REPORT.md` trước khi sửa.
 
 ## Lộ trình 9:00–13:00 (240 phút)

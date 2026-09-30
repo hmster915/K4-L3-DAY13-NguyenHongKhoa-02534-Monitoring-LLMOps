@@ -7,7 +7,8 @@ primary_slo:
     total_event: 'event == "request_received"'
   target_percent: 99.5
   error_budget_percent: 0.5
-  note: Học viên phải giải thích hoặc điều chỉnh ngưỡng bằng baseline của mình. Ví dụ nếu có 10,000 request trong cửa sổ 28 ngày, error budget 0.5% nghĩa là tối đa 50 request được phép không đạt SLO.
+  rationale: Latency 3000ms is the user-facing upper bound in the dashboard contract. The 99.5% target permits a small number of cold-start or dependency failures while keeping the normal request path reliable.
+  error_budget_example: With 10,000 requests in 28 days, the 0.5% error budget allows at most 50 requests to fail or exceed 3000ms.
 guardrails:
   error_rate_pct_max: 2
   daily_cost_usd_max: 2.5

@@ -1,0 +1,29 @@
+CP2 Trace Waterfall Evidence
+============================
+
+Project: day13-k4-l3b-02534
+Trace ID: 8cd4a2894fa0a749869ed838e76de1c7
+Session: s10
+Correlation ID: req-8f3e2d6a
+
+Observation tree reconstructed from parentObservationId:
+
+lab-agent-run [AGENT]
+  observation_id: abee7c383b38df91
+  parent: none
+  latency: 0.152 seconds
+  |
+  +-- retrieval [RETRIEVER]
+  |     observation_id: 9cc38af5f177d5b4
+  |     parent: abee7c383b38df91
+  |     latency: 0.000 seconds
+  |
+  +-- generation [GENERATION]
+        observation_id: 04bfba8cf4cbf8d6
+        parent: abee7c383b38df91
+        latency: 0.151 seconds
+        model: claude-sonnet-4-5
+        managed prompt: day13-chat v1
+
+The retrieval and generation observations are siblings under the same agent
+root and therefore isolate the two main processing stages.

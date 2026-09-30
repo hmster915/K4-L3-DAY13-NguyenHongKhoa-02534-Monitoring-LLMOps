@@ -1,0 +1,28 @@
+CP2 Prompt Promotion and Rollback Evidence
+==========================================
+
+Project: day13-k4-l3b-02534
+Prompt: day13-chat
+
+Initial state:
+  production -> version 1
+  baseline   -> version 1
+  candidate  -> version 2
+
+Promotion:
+  action: assigned production to version 2
+  verified production_version: 2
+  version 2 labels at promotion: candidate, latest, production
+  trace ID: f030b3ea8371f4bb787cf4c7e443bf09
+  correlation ID: req-f00d0002
+
+Rollback:
+  action: reassigned production to version 1
+  verified production_version: 1
+  final version 1 labels: baseline, production
+  final version 2 labels: candidate, latest
+  trace ID: a5bdd83e13d3915c8c807017618969b1
+  correlation ID: req-f00d0001
+
+The application continued to fetch by label; no code change was needed for
+either promotion or rollback.

@@ -1,0 +1,26 @@
+CP2 Trace Metadata Evidence
+===========================
+
+Project: day13-k4-l3b-02534
+Trace ID: 8cd4a2894fa0a749869ed838e76de1c7
+Generation observation ID: 04bfba8cf4cbf8d6
+
+Safe metadata:
+  correlation_id: req-8f3e2d6a
+  session_id: s10
+  feature: qa
+  environment: dev
+  model: claude-sonnet-4-5
+  prompt_name: day13-chat
+  prompt_label: production
+  prompt_version: 1
+  prompt_source: langfuse
+  input_tokens: 39
+  output_tokens: 104
+  total_tokens: 143
+  input_cost_usd: 0.000117
+  output_cost_usd: 0.001560
+  total_cost_usd: 0.001677
+  ttft_ms: 50
+
+Raw prompt/output and API credentials are intentionally excluded.

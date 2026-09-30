@@ -1,0 +1,25 @@
+CP2 Personal Langfuse Trace List
+================================
+
+Project: day13-k4-l3b-02534
+Query source: Langfuse Observations API v2
+Complete trace trees found in the CP2 window: 14
+Complete means the trace contains lab-agent-run, retrieval and generation.
+
+Trace ID                         Session             Correlation ID   Prompt
+8cd4a2894fa0a749869ed838e76de1c7 s10                 req-8f3e2d6a    day13-chat v1
+489f2d5b83f8ff1cd992d27630992560 s09                 req-50c7bec8    day13-chat v1
+aa7b380a079fa909605f3aaf55961dcd s08                 req-4f87e1cf    day13-chat v1
+b17610ee67b48db26bdb33ed6b365bae s07                 req-f484ed09    day13-chat v1
+60cbac37ca69d9e3c88226ce1e95ffa0 s06                 req-d530e2ff    day13-chat v1
+22f041b1085b45ca206127bcd56121ef s05                 req-5f77cffc    day13-chat v1
+68825f1c6b44861c211241eeabc19e6a s04                 req-03b1b142    day13-chat v1
+4772703e731bf4ad7a4825ab0322622c s03                 req-a796bdbf    day13-chat v1
+a9ca8d9398bd8fe475866388d79d05d7 s02                 req-c2a606e8    day13-chat v1
+3e626af15a1031b11b4cdb3bfc9e5d0a s01                 req-266350e9    day13-chat v1
+a5bdd83e13d3915c8c807017618969b1 cp2-rollback-v1     req-f00d0001    day13-chat v1
+f030b3ea8371f4bb787cf4c7e443bf09 cp2-promoted-v2     req-f00d0002    day13-chat v2
+7a022e190e3ab0cd8cb43fd67609552a cp2-candidate       req-ca2d1da2    day13-chat v2
+84e4019c274135a8c4e2d7294f64d92e cp2-baseline        req-ba5e1e01    day13-chat v1
+
+No trace ID from another project or student was used.

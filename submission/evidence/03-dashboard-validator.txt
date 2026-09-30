@@ -1,0 +1,17 @@
+CP2 Dashboard Validator Evidence
+================================
+
+Command:
+  .\.venv\Scripts\python.exe scripts\validate_dashboard.py
+
+Result:
+  HỢP LỆ: 6/6 panel có trong dashboard contract.
+
+Runtime endpoint check:
+  URL: http://127.0.0.1:8000/dashboard
+  HTTP status: 200
+  Runtime panels found: 6
+  Time range displayed: last 60 minutes
+  Refresh displayed: 30 seconds
+  Source displayed: data/logs.jsonl
+  Threshold/SLO lines displayed: yes
