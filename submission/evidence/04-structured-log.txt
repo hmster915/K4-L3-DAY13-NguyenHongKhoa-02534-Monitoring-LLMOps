@@ -1,0 +1,15 @@
+CP1 Structured Log Evidence
+===========================
+
+Runtime request:
+  HTTP status: 200
+  Supplied x-request-id: req-c0ffee12
+  Returned x-request-id: req-c0ffee12
+  Returned x-response-time-ms: 5373.27
+
+The following two records were read from data/logs.jsonl. They show the same
+correlation_id across request_received and response_sent, request enrichment,
+and response metrics used by the dashboard.
+
+{"service": "api", "payload": {"message_preview": "Email [REDACTED_EMAIL] phone [REDACTED_PHONE_VN] CCCD [REDACTED_CCCD] card [REDA..."}, "event": "request_received", "env": "dev", "model": "claude-sonnet-4-5", "session_id": "cp1-pii-check", "feature": "qa", "user_id_hash": "c3ff7f6c3105", "correlation_id": "req-c0ffee12", "level": "info", "ts": "2026-09-30T03:52:45.867872Z"}
+{"service": "api", "latency_ms": 5369, "ttft_ms": 50, "tokens_in": 42, "tokens_out": 95, "cost_usd": 0.001551, "quality_score": 0.8, "tool_name": "retrieval", "tool_success": true, "payload": {"answer_preview": "Starter answer. You should improve this output logic and add better quality chec..."}, "event": "response_sent", "env": "dev", "model": "claude-sonnet-4-5", "session_id": "cp1-pii-check", "feature": "qa", "user_id_hash": "c3ff7f6c3105", "correlation_id": "req-c0ffee12", "level": "info", "ts": "2026-09-30T03:52:51.239130Z"}

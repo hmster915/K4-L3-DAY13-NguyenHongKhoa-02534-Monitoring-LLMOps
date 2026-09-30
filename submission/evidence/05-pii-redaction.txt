@@ -1,0 +1,28 @@
+CP1 PII Redaction Evidence
+==========================
+
+Runtime request correlation_id: req-c0ffee12
+
+The request used synthetic test values for all four required categories. The
+raw test values are intentionally omitted from this committed artifact. The
+checks below were performed against the complete data/logs.jsonl file.
+
+Raw-value checks:
+  RawEmailPresent: false
+  RawPhonePresent: false
+  RawCccdPresent: false
+  RawCardPresent: false
+
+Redaction-marker checks:
+  EmailMarker: true
+  PhoneMarker: true
+  CccdMarker: true
+  CardMarker: true
+
+Sanitized request_received payload:
+  "message_preview": "Email [REDACTED_EMAIL] phone [REDACTED_PHONE_VN] CCCD [REDACTED_CCCD] card [REDA..."
+
+Independent validator result:
+  Potential PII leaks detected: 0
+  + [PASSED] PII scrubbing
+  Estimated Score: 100/100

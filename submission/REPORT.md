@@ -19,10 +19,10 @@
 | Evidence | Đường dẫn |
 |---|---|
 | Pytest cuối | `evidence/01-pytest.png` |
-| Log validator | `evidence/02-log-validator.png` |
+| Log validator | `evidence/02-log-validator.txt` |
 | Dashboard validator | `evidence/03-dashboard-validator.png` |
-| Structured log | `evidence/04-structured-log.png` |
-| PII redaction | `evidence/05-pii-redaction.png` |
+| Structured log | `evidence/04-structured-log.txt` |
+| PII redaction | `evidence/05-pii-redaction.txt` |
 | Trace list | `evidence/06-trace-list.png` |
 | Trace waterfall | `evidence/07-trace-waterfall.png` |
 | Trace metadata | `evidence/08-trace-metadata.png` |
@@ -37,20 +37,20 @@
 
 | Nội dung | Baseline | Kết quả cuối | Nhận xét |
 |---|---|---|---|
-| `validate_logs.py` | | | |
+| `validate_logs.py` | 30/100 | 100/100 | 11 correlation IDs, đầy đủ metadata, không phát hiện PII thô |
 | `validate_dashboard.py` | | | |
-| `pytest` | | | |
+| `pytest` | 22 passed | 27 passed | Bổ sung test correlation ID, context isolation và bốn loại PII |
 | Số traces hợp lệ | | | |
-| Số PII leak | | | |
+| Số PII leak | 0 | 0 | Kiểm tra runtime với email, điện thoại, CCCD và thẻ giả |
 | Latency P95 / TTFT P95 | | | |
 | Retrieval success rate | | | |
 
 ## 4. Logging và PII
 
-- **Cách tạo/nhận và truyền correlation ID:**
-- **Các metadata được ghi vào structured log:**
-- **Cách bảo đảm PII được scrub trước khi ghi:**
-- **Cách kiểm chứng kết quả:**
+- **Cách tạo/nhận và truyền correlation ID:** Middleware xóa context cũ ở đầu mỗi request, nhận `x-request-id` hợp lệ theo dạng `req-<8-hex>` hoặc sinh ID mới từ UUID. ID được bind vào structlog context, lưu trong `request.state`, trả lại ở response body/header và dùng để nối log với trace.
+- **Các metadata được ghi vào structured log:** `user_id_hash`, `session_id`, `feature`, `model`, `env` và `correlation_id`, bên cạnh `ts`, `level`, `service`, `event` cùng các số liệu latency/token/cost/quality khi có.
+- **Cách bảo đảm PII được scrub trước khi ghi:** `scrub_event` duyệt đệ quy chuỗi trong event và được đăng ký trước `JsonlFileProcessor` và `JSONRenderer`, nên email, điện thoại Việt Nam, CCCD và thẻ thanh toán được che trước khi serialize/ghi file.
+- **Cách kiểm chứng kết quả:** Chạy unit/integration tests, gửi request runtime chứa bốn loại PII giả và chạy `python scripts/validate_logs.py`. Kết quả CP1 đạt 100/100, 11 correlation ID hợp lệ, không thiếu enrichment và không phát hiện PII thô.
 
 ## 5. Tracing và prompt versioning
 
