@@ -44,14 +44,19 @@ def test_dashboard_snapshot_uses_structured_log_contract() -> None:
 
 
 def test_dashboard_renders_six_named_runtime_panels() -> None:
-    rendered = render_dashboard_html(records=[])
+    rendered = render_dashboard_html(
+        records=[],
+        filter_label="feature=monitoring",
+        latency_threshold_ms=2000,
+    )
 
     for panel_id in ("latency", "traffic", "errors", "cost", "tokens", "quality"):
         assert f'id="panel-{panel_id}"' in rendered
     assert "last 60 minutes" in rendered
     assert "Refresh: 30 seconds" in rendered
     assert "Source: data/logs.jsonl" in rendered
-    assert "SLO threshold" in rendered
+    assert "Filter: feature=monitoring" in rendered
+    assert "Active threshold: P95 ≤ 2000 ms" in rendered
 
 
 def test_recent_log_reader_ignores_old_and_invalid_records(tmp_path: Path) -> None:

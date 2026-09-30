@@ -9,7 +9,7 @@
 - **Lớp:** K4-L3B
 - **Repository URL:**
 - **Commit SHA cuối:**
-- **Challenge ID:**
+- **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1`
 - **Tên project Langfuse cá nhân:** `day13-k4-l3b-<MSSV>`
 
 ## 2. Evidence index
@@ -30,8 +30,8 @@
 | Prompt rollback | `evidence/10-prompt-rollback.txt` |
 | Dashboard runtime | `evidence/11-dashboard-overview.png` |
 | Incident metric | `evidence/12-incident-metric.png` |
-| Incident log | `evidence/13-incident-log.png` |
-| Incident trace | `evidence/14-incident-trace.png` |
+| Incident log | `evidence/13-incident-log.txt` |
+| Incident trace | `evidence/14-incident-trace.txt` |
 
 ## 3. Kết quả kỹ thuật
 
@@ -74,14 +74,14 @@
 
 ## 7. Điều tra challenge
 
-- **Challenge ID:**
-- **Khoảng thời gian điều tra:**
-- **Triệu chứng từ metrics:**
-- **Log line và correlation ID liên quan:**
-- **Trace ID và span gây ảnh hưởng:**
-- **Root cause:**
-- **Fix action:**
-- **Preventive measure:**
+- **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1`
+- **Khoảng thời gian điều tra:** `2026-09-30T04:45:37.1307719Z` đến `2026-09-30T04:45:51.2151064Z`
+- **Triệu chứng từ metrics:** Năm request feature `monitoring` có latency P50 2652 ms, P95/P99 2654 ms, vượt ngưỡng challenge 2000 ms; error rate 0%, retrieval success 100%, TTFT P95 50 ms.
+- **Log line và correlation ID liên quan:** `response_sent` lúc `2026-09-30T04:45:43.200262Z`, `correlation_id=req-623b84ba`, `latency_ms=2654`, session `k4-l3b-challenge-s03`.
+- **Trace ID và span gây ảnh hưởng:** Trace `aa1791bc3a383f0820594b11c22648a6`; root `lab-agent-run` 2.654 s, retrieval `07e36e6cf52ccbe2` 2.501 s, generation `00daeb5a12c093d5` 0.152 s.
+- **Root cause:** Official incident `rag_slow` injected delay into retrieval. Retrieval chiếm 2.501/2.654 giây trong khi generation, TTFT, token và cost bình thường, nên không có bằng chứng prompt/model là bottleneck.
+- **Fix action:** Disable `rag_slow` hoặc khôi phục retrieval configuration bình thường. `/health` cuối cùng xác nhận cả ba incident đều `false`.
+- **Preventive measure:** Thêm warning riêng cho feature monitoring ở 2000 ms, thấp hơn hard SLO 3000 ms; runbook phải chọn request bằng `correlation_id` và so sánh retrieval/generation span trước khi rollback prompt hoặc đổi model.
 
 > Gợi ý cách viết ngắn, không thay cho evidence thực tế: "Metric cho thấy `[latency/error/cost/quality]` bất thường trong `[khoảng thời gian]`. Log line `[event]` có `correlation_id=[...]` đại diện cho request bị ảnh hưởng. Trace cùng `correlation_id` cho thấy span `[retrieval/generation/prompt/tool]` có dấu hiệu `[chậm/lỗi/token tăng]`. Root cause là `[nguyên nhân suy ra từ evidence]`. Fix action là `[hành động khôi phục]`; preventive measure là `[alert/runbook/test/guardrail để ngăn tái diễn]`."
 
@@ -93,7 +93,7 @@
 - **Cách hiểu luồng Metrics → Logs → Traces:**
 - **Vai trò của prompt version, token/cost, SLO hoặc rollback trong vận hành LLM:**
 - **Điều quan trọng nhất đã học:**
-- **Hạn chế hoặc phần chưa hoàn thành, nếu có:**
+- **Hạn chế hoặc phần chưa hoàn thành, nếu có:** Challenge chính thức đã hoàn thành bằng file K4-L3B phát hành từ upstream commit `0a7eadb`. Evidence metric là PNG runtime; evidence log/trace hiện là output text xác thực. Có thể bổ sung ảnh Langfuse UI cho evidence 14 trước khi nộp nếu browser đăng nhập khả dụng.
 
 ## 9. Checklist trước khi nộp
 

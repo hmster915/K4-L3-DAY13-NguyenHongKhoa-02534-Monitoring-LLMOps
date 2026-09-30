@@ -1,0 +1,46 @@
+CP3 Official Incident Trace Evidence
+===================================
+
+Project: day13-k4-l3b-02534
+Challenge ID: day13-k4-l3b-monitoring-llmops-v1
+Correlation ID: req-623b84ba
+Trace ID: aa1791bc3a383f0820594b11c22648a6
+
+Observation tree reconstructed from Langfuse Observations API v2:
+
+lab-agent-run [AGENT]
+  observation_id: 1880fda704c9c2ba
+  parent: none
+  latency: 2.654 seconds
+  feature: monitoring
+  prompt: day13-chat v1 / production
+  |
+  +-- retrieval [RETRIEVER]
+  |     observation_id: 07e36e6cf52ccbe2
+  |     parent: 1880fda704c9c2ba
+  |     latency: 2.501 seconds
+  |
+  +-- generation [GENERATION]
+        observation_id: 00daeb5a12c093d5
+        parent: 1880fda704c9c2ba
+        latency: 0.152 seconds
+        model: claude-sonnet-4-5
+        prompt: day13-chat v1 / production
+        TTFT: 50 ms
+        usage: 46 input, 123 output, 169 total tokens
+        total cost: 0.001983 USD
+
+Root-cause conclusion:
+  Retrieval consumes 2.501 of the root's 2.654 seconds. Generation remains at
+  0.152 seconds with normal TTFT, token usage and cost. Together with the
+  official incident type rag_slow, the evidence identifies the injected
+  retrieval delay—not the LLM or prompt—as the root cause.
+
+Fix action:
+  Disable rag_slow or restore the normal retrieval configuration. The final
+  /health state confirmed all incidents are false.
+
+Preventive measure:
+  Add a monitoring-feature latency warning at 2000 ms below the hard 3000 ms
+  SLO, then use correlation_id and retrieval/generation span comparison before
+  rolling back prompts or changing model configuration.

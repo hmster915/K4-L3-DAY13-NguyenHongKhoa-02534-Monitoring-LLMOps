@@ -1,0 +1,16 @@
+CP3 Official Incident Log Evidence
+=================================
+
+Challenge ID: day13-k4-l3b-monitoring-llmops-v1
+Cohort: K4
+Incident window: 2026-09-30T04:45:37.1307719Z to 2026-09-30T04:45:51.2151064Z
+Representative correlation_id: req-623b84ba
+
+The following records were read directly from data/logs.jsonl:
+
+{"service": "api", "payload": {"message_preview": "Summarize the observability workflow for an AI API."}, "event": "request_received", "session_id": "k4-l3b-challenge-s03", "model": "claude-sonnet-4-5", "feature": "monitoring", "env": "dev", "correlation_id": "req-623b84ba", "user_id_hash": "189d0a182d4e", "level": "info", "ts": "2026-09-30T04:45:40.545294Z"}
+{"service": "api", "latency_ms": 2654, "ttft_ms": 50, "tokens_in": 46, "tokens_out": 123, "cost_usd": 0.001983, "quality_score": 0.8, "tool_name": "retrieval", "tool_success": true, "payload": {"answer_preview": "Starter answer. You should improve this output logic and add better quality chec..."}, "event": "response_sent", "session_id": "k4-l3b-challenge-s03", "model": "claude-sonnet-4-5", "feature": "monitoring", "env": "dev", "correlation_id": "req-623b84ba", "user_id_hash": "189d0a182d4e", "level": "info", "ts": "2026-09-30T04:45:43.200262Z"}
+
+The response exceeds the official challenge latency threshold of 2000 ms while
+TTFT, quality, cost and retrieval success remain normal. The correlation ID is
+used to locate the matching Langfuse trace in evidence 14.

@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from structlog.contextvars import bind_contextvars
 
 from .agent import LabAgent
-from .dashboard import render_dashboard_html
+from .dashboard import load_recent_records, render_dashboard_html
 from .incidents import disable, enable, status
 from .logging_config import configure_logging, get_logger
 from .metrics import record_error, snapshot
@@ -48,8 +48,20 @@ async def metrics() -> dict:
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard() -> HTMLResponse:
-    return HTMLResponse(render_dashboard_html())
+async def dashboard(
+    feature: str | None = None,
+    latency_threshold_ms: int | None = None,
+) -> HTMLResponse:
+    records = load_recent_records()
+    if feature:
+        records = [record for record in records if record.get("feature") == feature]
+    return HTMLResponse(
+        render_dashboard_html(
+            records,
+            filter_label=f"feature={feature}" if feature else "all features",
+            latency_threshold_ms=latency_threshold_ms,
+        )
+    )
 
 
 @app.post("/chat", response_model=ChatResponse)

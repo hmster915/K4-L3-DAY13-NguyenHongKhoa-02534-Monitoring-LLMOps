@@ -127,15 +127,22 @@ def render_dashboard_html(
     records: list[dict[str, Any]] | None = None,
     *,
     config_path: Path = CONFIG_PATH,
+    filter_label: str = "all features",
+    latency_threshold_ms: int | None = None,
 ) -> str:
     contract = yaml.safe_load(config_path.read_text(encoding="utf-8"))["dashboard"]
     snapshot = build_dashboard_snapshot(records if records is not None else load_recent_records())
     panels = {panel["id"]: panel for panel in contract["panels"]}
 
+    effective_latency_threshold = (
+        latency_threshold_ms
+        if latency_threshold_ms is not None
+        else panels["latency"]["threshold"]["value"]
+    )
     latency_status = _status(
         snapshot["latency_p95"],
         operator=panels["latency"]["threshold"]["operator"],
-        threshold=panels["latency"]["threshold"]["value"],
+        threshold=effective_latency_threshold,
     )
     traffic_status = _status(
         snapshot["requests_per_minute"],
@@ -188,9 +195,9 @@ def render_dashboard_html(
   </style>
 </head>
 <body><main>
-  <header><div><h1>{html.escape(contract['title'])}</h1><div class="subtitle">Production signals from structured application logs</div></div><div class="meta">Time range: last {contract['time_range_minutes']} minutes<br>Refresh: {contract['refresh_seconds']} seconds · Source: data/logs.jsonl<br>Records in window: {snapshot['records']}</div></header>
+  <header><div><h1>{html.escape(contract['title'])}</h1><div class="subtitle">Production signals from structured application logs</div></div><div class="meta">Time range: last {contract['time_range_minutes']} minutes<br>Filter: {html.escape(filter_label)}<br>Refresh: {contract['refresh_seconds']} seconds · Source: data/logs.jsonl<br>Records in window: {snapshot['records']}</div></header>
   <div class="grid">
-    <section class="panel" id="panel-latency"><div class="panel-head"><h2>Latency percentiles and TTFT</h2>{badge(latency_status)}</div><div class="metrics"><div class="metric"><div class="value">{snapshot['latency_p50']:.0f} ms</div><div class="label">Latency P50</div></div><div class="metric"><div class="value">{snapshot['latency_p95']:.0f} ms</div><div class="label">Latency P95</div></div><div class="metric"><div class="value">{snapshot['latency_p99']:.0f} ms</div><div class="label">Latency P99</div></div><div class="metric"><div class="value">{snapshot['ttft_p95']:.0f} ms</div><div class="label">TTFT P95</div></div></div><div class="threshold">SLO threshold: P95 ≤ 3000 ms</div></section>
+    <section class="panel" id="panel-latency"><div class="panel-head"><h2>Latency percentiles and TTFT</h2>{badge(latency_status)}</div><div class="metrics"><div class="metric"><div class="value">{snapshot['latency_p50']:.0f} ms</div><div class="label">Latency P50</div></div><div class="metric"><div class="value">{snapshot['latency_p95']:.0f} ms</div><div class="label">Latency P95</div></div><div class="metric"><div class="value">{snapshot['latency_p99']:.0f} ms</div><div class="label">Latency P99</div></div><div class="metric"><div class="value">{snapshot['ttft_p95']:.0f} ms</div><div class="label">TTFT P95</div></div></div><div class="threshold">Active threshold: P95 ≤ {effective_latency_threshold} ms</div></section>
     <section class="panel" id="panel-traffic"><div class="panel-head"><h2>Request traffic</h2>{badge(traffic_status)}</div><div class="metrics"><div class="metric"><div class="value">{snapshot['request_count']}</div><div class="label">Requests</div></div><div class="metric"><div class="value">{snapshot['requests_per_minute']}</div><div class="label">Requests/min</div></div></div><div class="series">{_series_text(snapshot['traffic_series'], 'req')}</div><div class="threshold">Expected traffic: ≥ 1 request/min while workload is active</div></section>
     <section class="panel" id="panel-errors"><div class="panel-head"><h2>Error rate and retrieval success</h2>{badge(error_status)}</div><div class="metrics"><div class="metric"><div class="value">{snapshot['error_rate_pct']:.2f}%</div><div class="label">Error rate</div></div><div class="metric"><div class="value">{snapshot['retrieval_success_rate_pct']:.2f}%</div><div class="label">Retrieval success</div></div></div><div class="series">Error breakdown: {html.escape(json.dumps(snapshot['error_breakdown'], ensure_ascii=False))}</div><div class="threshold">SLO thresholds: errors ≤ 2% · retrieval ≥ 90%</div></section>
     <section class="panel" id="panel-cost"><div class="panel-head"><h2>Cost over time</h2>{badge(cost_status)}</div><div class="metrics"><div class="metric"><div class="value">${snapshot['cost_total_usd']:.6f}</div><div class="label">Window total</div></div></div><div class="series">{_series_text(snapshot['cost_series'], 'USD')}</div><div class="threshold">Budget threshold: total ≤ $2.50</div></section>
